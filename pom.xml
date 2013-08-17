@@ -680,7 +680,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
+							<!--<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>-->
 						</configuration>
 					</plugin>				
 				</plugins>
@@ -712,7 +712,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.UnStable</includedGroups>
+							<!--<includedGroups>org.springside.modules.test.category.UnStable</includedGroups>-->
 						</configuration>
 					</plugin>				
 				</plugins>

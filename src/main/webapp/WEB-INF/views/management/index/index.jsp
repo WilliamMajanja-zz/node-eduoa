@@ -37,6 +37,8 @@
 <!-- 自定义JS -->
 <script src="${contextPath}/styles/management/js/customer.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/plugin/timepicker/js/eduoa.timepicker.js" type="text/javascript"></script>
+<script src="${contextPath}/styles/fusionchart/FusionCharts/FusionCharts.js" type="text/javascript"></script>
+<script src="${contextPath}/styles/fusionchart/FusionCharts/FusionChartsExportComponent.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 $(function(){	

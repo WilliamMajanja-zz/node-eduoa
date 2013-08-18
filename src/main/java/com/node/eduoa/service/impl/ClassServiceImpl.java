@@ -95,4 +95,10 @@ public class ClassServiceImpl implements ClassService {
     public List<OaClass> findByGradeId(Long gradeId) {
         return classDAO.findByGradeId(gradeId);
     }
+
+	@Override
+	public List<OaClass> findList() {
+		// TODO Auto-generated method stub
+		return classDAO.findAll();
+	}
 }

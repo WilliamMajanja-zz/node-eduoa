@@ -69,4 +69,10 @@ public class GradeServiceImpl implements GradeService {
     public List<OaGrade> findAllByYear(Integer currentYear) {
         return gradeDAO.findAllOrderByCreateTime(currentYear);
     }
+
+	@Override
+	public List<OaGrade> findList() {
+		// TODO Auto-generated method stub
+		return gradeDAO.findAll();
+	}
 }

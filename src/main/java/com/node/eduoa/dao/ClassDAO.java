@@ -39,7 +39,7 @@ public interface ClassDAO extends JpaRepository<OaClass, Long>, JpaSpecification
     List<OaClass> findByClassIds(@Param("classIds") List<Long> classIds);
 
     @SuppressWarnings("JpaQlInspection")
-    @Query("select c from OaClass c where c.oaGradeByGradeId=:gradeId")
+    @Query("select c from OaClass c where c.oaGradeByGradeId.id=:gradeId")
     List<OaClass> findByGradeId(@Param("gradeId") Long gradeId);
 
 }

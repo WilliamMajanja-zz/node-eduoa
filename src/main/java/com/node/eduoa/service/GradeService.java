@@ -41,4 +41,6 @@ public interface GradeService {
 	List<OaGrade> findAll(Page page);
 
     List<OaGrade> findAllByYear(Integer currentYear);
+    
+    List<OaGrade> findList();
 }

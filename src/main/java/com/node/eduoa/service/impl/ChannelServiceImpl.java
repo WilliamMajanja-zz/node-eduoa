@@ -49,4 +49,9 @@ public class ChannelServiceImpl implements ChannelService {
     public List<CmsChannel> findAllChannel() {
         return channelDao.findAllChannel();
     }
+
+    @Override
+    public CmsChannel findByChannelCode(String channelCode) {
+        return channelDao.findByChannelCode(channelCode);
+    }
 }

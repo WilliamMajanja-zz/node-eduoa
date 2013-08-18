@@ -2,8 +2,9 @@
          pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include.inc.jsp"%>
 <script type="text/javascript">
-    var chart = new FusionCharts("${contextPath }/styles/fusionchart/FusionCharts/Column2D.swf", "ChartId", "500", "300", "0", "0");
-    chart.setDataURL("${contextPath }/data/Column2D.xml");
+
+    var chart = new FusionCharts("${contextPath }/styles/fusionchart/FusionCharts/StackedColumn2D.swf", "ChartId", "500", "300", "0", "0");
+    chart.setDataURL("${contextPath }/data/stacked.xml");
     chart.render("chartdiv");
 </script>
 <div class="pageContent">

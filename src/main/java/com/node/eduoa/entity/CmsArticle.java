@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ *
  * User: linfeng at Administrator
  * Date: 13-7-6
  * Time: 上午9:57
@@ -24,36 +24,40 @@ public class CmsArticle extends IdEntity {
     private Long articleClassId;
 
     @Column(name = "title")
-    @Basic
     private String title;
 
     @Column(name = "content")
-    @Basic
     private String content;
 
-    @Column(name = "hits")
-    @Basic
-    private Integer hits;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_time")
-    @Basic
     private Date createTime;
 
     @Column(name = "create_user_id")
-    @Basic
     private Long createUserId;
+
+    @Column(name = "create_user_name")
+    private String createUserName;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_time")
     private Date updateTime;
 
     @Column(name = "update_user_id")
-    @Basic
     private Long updateUserId;
 
+    @Column(name = "update_user_name")
+    private String updateUserName;
+
     @Column(name = "article_state")
-    @Basic
     private Integer articleState;
+
+    @Column(name = "attachment_id")
+    private Long attachmentId;
+
+    @Column(name = "file_name")
+    private String fileName;
+
     @ManyToOne
     @JoinColumn(name = "channel_id", referencedColumnName = "id")
     private CmsChannel channel;
@@ -80,14 +84,6 @@ public class CmsArticle extends IdEntity {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Integer getHits() {
-        return hits;
-    }
-
-    public void setHits(Integer hits) {
-        this.hits = hits;
     }
 
     public Date getCreateTime() {
@@ -136,5 +132,37 @@ public class CmsArticle extends IdEntity {
 
     public void setChannel(CmsChannel channel) {
         this.channel = channel;
+    }
+
+    public String getUpdateUserName() {
+        return updateUserName;
+    }
+
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Long getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(Long attachmentId) {
+        this.attachmentId = attachmentId;
     }
 }

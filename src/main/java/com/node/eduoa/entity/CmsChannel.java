@@ -30,6 +30,10 @@ public class CmsChannel extends IdEntity {
     @javax.persistence.Column(name = "channel_url")
     @Basic
     private String channelUrl;
+    @javax.persistence.Column(name = "channel_code")
+    @Basic
+    private String channelCode;
+
     @OneToMany(mappedBy = "channel")
     private List<CmsArticle> articles = Lists.newArrayList();
 
@@ -63,5 +67,13 @@ public class CmsChannel extends IdEntity {
 
     public void setArticles(List<CmsArticle> articles) {
         this.articles = articles;
+    }
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
     }
 }

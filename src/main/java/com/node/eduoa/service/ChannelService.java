@@ -26,4 +26,6 @@ public interface ChannelService {
 
     List<CmsChannel> findAllChannel();
 
+    CmsChannel findByChannelCode(String channelCode);
+
 }

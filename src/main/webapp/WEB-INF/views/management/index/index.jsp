@@ -26,11 +26,11 @@
 --%>
 <script src="${contextPath}/styles/management/js/jquery.validate.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/management/js/jquery.bgiframe.js" type="text/javascript"></script>
-<%-- 
+
 <script src="${contextPath}/styles/xheditor/xheditor-1.1.14-zh-cn.min.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/uploadify/scripts/swfobject.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/uploadify/scripts/jquery.uploadify.v2.1.0.js" type="text/javascript"></script>
---%>
+
 <script src="${contextPath}/styles/management/js/dwz.min.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/plugin/timepicker/js/jquery.timepicker.js" type="text/javascript"></script>
 <script src="${contextPath}/styles/management/js/dwz.regional.zh.js" type="text/javascript"></script>

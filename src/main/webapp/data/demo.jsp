@@ -4,7 +4,6 @@
 <script type="text/javascript">
     var chart = new FusionCharts("${contextPath }/styles/fusionchart/FusionCharts/Column2D.swf", "ChartId", "500", "300", "0", "0");
     chart.setDataURL("${contextPath }/data/Column2D.xml");
-    chart.configure()
     chart.render("chartdiv");
 </script>
 <div class="pageContent">

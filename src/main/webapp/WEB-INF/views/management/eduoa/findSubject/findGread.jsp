@@ -3,14 +3,14 @@
 <%@ include file="/WEB-INF/views/include.inc.jsp"%>
 <script type="text/javascript">
     var chart = new FusionCharts("${contextPath }/styles/fusionchart/FusionCharts/Column2D.swf", "ChartId", "500", "300", "0", "0");
-    chart.setXMLData("${findSubject }");
+    chart.setXMLData("${findGread }");
     chart.render("chartdiv");
 </script>
-<keta:paginationForm action="${contextPath }/management/eduoa/score/findSubject" page="${page }">
+<keta:paginationForm action="${contextPath }/management/eduoa/score/findGread" page="${page }">
 	<input type="hidden" name="keywords" value="${keywords}"/>
 </keta:paginationForm>
 
-<form method="post" action="${contextPath }/management/eduoa/score/findSubject" onsubmit="return navTabSearch(this)">
+<form method="post" action="${contextPath }/management/eduoa/score/findGread" onsubmit="return navTabSearch(this)">
 	<div class="pageHeader">
 		<div class="searchBar">
 			<ul class="searchContent">
@@ -39,9 +39,7 @@
 				<li>
 					<label>学科：</label>
 					<select name="subjectId" class="combox" >
-						<c:forEach items="${subjects }" var="item">
-							<option value="${item.id }">${item.subjectName }</option>
-						</c:forEach>
+						<option value="0">所有学科</option>
 					</select>
 				</li>
 			</ul>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chart palette='2' caption='月度销售额' xAxisName='月度' yAxisName='单位(台)' showValues='0' decimals='0' formatNumberScale='0' useRoundEdges='1' baseFont='宋体' baseFontSize='12'>
+<set label='一月' value='462' />
+<set label='二月' value='857' />
+<set label='三月' value='671' />
+<set label='四月' value='494' />
+<set label='五月' value='761' />
+<set label='六月' value='960' />
+</chart>

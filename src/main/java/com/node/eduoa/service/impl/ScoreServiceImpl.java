@@ -60,4 +60,16 @@ public class ScoreServiceImpl implements ScoreService {
         page.setTotalCount(springDataPage.getTotalElements());
         return springDataPage.getContent();
     }
+
+	@Override
+	public List<OaScore> findSubject(OaScore oaScore) {
+		 List<OaScore> oaScores = scoreDAO.findBySubjectName(oaScore.getGradeId(), oaScore.getSubjectId(), oaScore.getExamType());
+		 return oaScores;
+	}
+
+	@Override
+	public List<OaScore> findGread(OaScore oaScore) {
+		 List<OaScore> oaScores = scoreDAO.findByGread(oaScore.getGradeId(), oaScore.getExamType());
+		 return oaScores;
+	}
 }

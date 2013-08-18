@@ -13,15 +13,15 @@
  
 package com.node.eduoa.dao;
 
-import com.node.eduoa.entity.OaGrade;
-import com.node.eduoa.entity.OaScore;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.node.eduoa.entity.OaScore;
 
 /**
  * 分数
@@ -33,5 +33,11 @@ import java.util.List;
 public interface ScoreDAO extends JpaRepository<OaScore, Long> {
 
 	Page<OaScore> findByStudentNameContaining(String studentName, Pageable pageable);
-
+	
+	@Query("select s from OaScore s where s.gradeId = :grade " +
+			"and s.subjectId = :subject and s.examType = :examType")
+	List<OaScore> findBySubjectName(@Param("grade") Long grade,
+			@Param("subject") Long subject,@Param("examType") int examType);
+	@Query("select s from OaScore s where s.gradeId = :grade " +"and s.examType = :examType")
+	List<OaScore> findByGread(@Param("grade") Long grade,@Param("examType") int examType);
 }

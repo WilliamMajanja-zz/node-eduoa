@@ -13,17 +13,46 @@
  
 package com.node.eduoa.controller;
 
-import com.node.eduoa.converters.CustomTimestampEditor;
-import com.node.eduoa.entity.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Validator;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
+import com.node.eduoa.entity.OaGrade;
 import com.node.eduoa.entity.OaScore;
+import com.node.eduoa.entity.OaStudent;
+import com.node.eduoa.entity.OaStudentClass;
+import com.node.eduoa.entity.OaStudentGrade;
+import com.node.eduoa.entity.OaSubject;
 import com.node.eduoa.enums.ExamsEnum;
 import com.node.eduoa.enums.SemesterEnum;
+import com.node.eduoa.service.ClassService;
 import com.node.eduoa.service.GradeService;
 import com.node.eduoa.service.ScoreService;
 import com.node.eduoa.service.StudentService;
 import com.node.eduoa.service.SubjectService;
-import com.node.eduoa.service.impl.ScoreServiceImpl;
-import com.node.eduoa.service.impl.StudentServiceImpl;
 import com.node.eduoa.utils.YearUtils;
 import com.node.eduoa.utils.model.ScoreModel;
 import com.node.system.log.Log;
@@ -32,22 +61,6 @@ import com.node.system.log.LogMessageObject;
 import com.node.system.log.impl.LogUitl;
 import com.node.system.util.dwz.AjaxObject;
 import com.node.system.util.dwz.Page;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springside.modules.beanvalidator.BeanValidators;
-import org.springside.modules.persistence.SearchFilter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Validator;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /** 
  * 分数管理
@@ -72,6 +85,9 @@ public class ScoreController extends BaseFormController {
     @Qualifier("studentServiceImpl")
     @Autowired
     private StudentService studentService;
+    
+    @Autowired
+    private ClassService classService;
 	
 	@Autowired
 	private Validator validator;
@@ -80,6 +96,8 @@ public class ScoreController extends BaseFormController {
 	private static final String UPDATE = "management/eduoa/score/update";
 	private static final String LIST = "management/eduoa/score/list";
 	private static final String VIEW = "management/eduoa/score/view";
+	private static final String FINDSEARCH = "management/eduoa/findSubject/findSubject";
+	private static final String FINDGREAD = "management/eduoa/findSubject/findGread";
 
     @InitBinder
     protected void initBinder(HttpServletRequest request,
@@ -300,5 +318,145 @@ public class ScoreController extends BaseFormController {
 		map.put("score", score);
         map.put("semesterEnums", SemesterEnum.values());
 		return VIEW;
+	}
+	/**
+	 * 跳转到单科平均分查找页面
+	 * @param page
+	 * @param subjectName
+	 * @param map
+	 * @return
+	 */
+	@RequiresPermissions("Score:save")
+	@RequestMapping(value="/findSearch", method=RequestMethod.GET)
+	public String findSearch(Map<String, Object> map) {
+        map.put("examsEnums", ExamsEnum.values());
+        Calendar calendar = Calendar.getInstance();
+        map.put("grades", gradeService.findAllByYear(calendar.get(Calendar.YEAR)));
+        map.put("subjects", subjectService.findAll());
+        String charset="" +
+				"<chart palette='2' yAxisName='分数' xAxisName='班级' caption='单科平均分' " +
+        		"showValues='0' decimals='0' formatNumberScale='0' useRoundEdges='1' baseFont='宋体' baseFontSize='12'>" ;
+		String sets="";
+		sets="<set label='无' value=''  />" +sets;
+        map.put("findSubject", charset+sets+"</chart>");
+		return FINDSEARCH;
+	}
+	
+	
+	@RequiresPermissions("Score:view")
+	@RequestMapping(value="/findSubject", method={RequestMethod.GET, RequestMethod.POST})
+	public String findSubject(Page page, OaScore oaScore, Map<String, Object> map) {
+
+		List<OaScore> scores = scoreService.findSubject(oaScore);
+//		scores = scoreService.findAll(page);
+		float scoreSubject = 0;
+		List<OaScore> findScores = new ArrayList<OaScore>();
+		int index =0;
+		Map<Long, List<OaScore>> scoreMap = new HashMap<Long, List<OaScore>>();
+		for (OaScore score: scores) {
+			if (scoreMap.containsKey(score.getClassId())) {
+				scoreMap.get(score.getClassId()).add(score);
+			} else {
+				List<OaScore> tmpScoreList = Lists.newArrayList();
+				tmpScoreList.add(score);
+				scoreMap.put(score.getClassId(), tmpScoreList);
+			}
+		}
+		for(Entry<Long, List<OaScore>> entry: scoreMap.entrySet()) {
+			 System.out.print(entry.getKey() + ":" + entry.getValue() + "\t");
+			 List<OaScore> soList = entry.getValue();
+			 for (int j = 0; j < soList.size(); j++) {
+				 scoreSubject = scoreSubject+soList.get(j).getScore();
+				 index = j;
+			}
+			scores.get(index).setScore(scoreSubject/index);
+			findScores.add(soList.get(index));
+			
+		}
+		String charset="" +
+				"<chart palette='2' yAxisName='分数' xAxisName='班级' caption='"+findScores.get(0).getSubjectName()+"平均分' " +
+				"showValues='1' decimals='0' formatNumberScale='0' useRoundEdges='1' baseFont='宋体' baseFontSize='12'>" ;
+		String sets="";
+		
+		
+		for (OaScore score : findScores) {
+			sets="<set label='"+score.getClassName()+"' value='"+score.getScore()+"'  />" +sets;
+		}
+        map.put("findSubject", charset+sets+"</chart>");
+        map.put("examsEnums", ExamsEnum.values());
+        Calendar calendar = Calendar.getInstance();
+        map.put("grades", gradeService.findAllByYear(calendar.get(Calendar.YEAR)));
+        map.put("subjects", subjectService.findAll());
+		return FINDSEARCH;
+	}
+	
+	/**
+	 * 跳转到总平均分查找页面
+	 * @param page
+	 * @param subjectName
+	 * @param map
+	 * @return
+	 */
+	@RequiresPermissions("Score:save")
+	@RequestMapping(value="/findGreadSearch", method=RequestMethod.GET)
+	public String findGreadSearch(Map<String, Object> map) {
+        map.put("examsEnums", ExamsEnum.values());
+        Calendar calendar = Calendar.getInstance();
+        map.put("grades", gradeService.findAllByYear(calendar.get(Calendar.YEAR)));
+        map.put("subjects", subjectService.findAll());
+        String charset="" +
+				"<chart palette='2' yAxisName='分数' xAxisName='班级' caption='总平均分' " +
+        		"showValues='0' decimals='0' formatNumberScale='0' useRoundEdges='1' baseFont='宋体' baseFontSize='12'>" ;
+		String sets="";
+		sets="<set label='无' value=''  />" +sets;
+        map.put("findGread", charset+sets+"</chart>");
+		return FINDGREAD;
+	}
+	
+	
+	@RequiresPermissions("Score:view")
+	@RequestMapping(value="/findGread", method={RequestMethod.GET, RequestMethod.POST})
+	public String findGread(Page page, OaScore oaScore, Map<String, Object> map) {
+
+		List<OaScore> scores = scoreService.findGread(oaScore);
+//		scores = scoreService.findAll(page);
+		float scoreSubject = 0;
+		List<OaScore> findScores = new ArrayList<OaScore>();
+		int index =0;
+		Map<Long, List<OaScore>> scoreMap = new HashMap<Long, List<OaScore>>();
+		for (OaScore score: scores) {
+			if (scoreMap.containsKey(score.getClassId())) {
+				scoreMap.get(score.getClassId()).add(score);
+			} else {
+				List<OaScore> tmpScoreList = Lists.newArrayList();
+				tmpScoreList.add(score);
+				scoreMap.put(score.getClassId(), tmpScoreList);
+			}
+		}
+		for(Entry<Long, List<OaScore>> entry: scoreMap.entrySet()) {
+			 List<OaScore> soList = entry.getValue();
+			 for (int j = 0; j < soList.size(); j++) {
+				 scoreSubject = scoreSubject+soList.get(j).getScore();
+				 index = j;
+			}
+			scores.get(index).setScore(scoreSubject/index);
+			findScores.add(soList.get(index));
+			
+		}
+		String charset="" +
+				"<chart palette='2' yAxisName='分数' xAxisName='班级' caption='总平均分' " +
+				"showValues='1' decimals='0' formatNumberScale='0' useRoundEdges='1' baseFont='宋体' baseFontSize='12'>" ;
+		String sets="";
+		
+		
+		for (OaScore score : findScores) {
+			sets="<set label='"+score.getClassName()+"' value='"+score.getScore()+"'  />" +sets;
+		}
+        map.put("findGread", charset+sets+"</chart>");
+        map.put("examsEnums", ExamsEnum.values());
+//        Calendar calendar = Calendar.getInstance();
+//        map.put("grades", gradeService.findAllByYear(calendar.get(Calendar.YEAR)));
+//        map.put("subjects", subjectService.findAll());
+		return FINDGREAD;
 	}
 }

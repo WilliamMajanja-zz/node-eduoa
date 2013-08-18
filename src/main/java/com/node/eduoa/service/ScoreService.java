@@ -38,5 +38,7 @@ public interface ScoreService {
 	List<OaScore> find(Page page, String studentName);
 
 	List<OaScore> findAll(Page page);
-
+	
+	List<OaScore> findSubject(OaScore oaScore);
+	List<OaScore> findGread(OaScore oaScore);
 }

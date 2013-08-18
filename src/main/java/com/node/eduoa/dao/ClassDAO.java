@@ -38,4 +38,8 @@ public interface ClassDAO extends JpaRepository<OaClass, Long>, JpaSpecification
     @Query("select c from OaClass c where c.id in :classIds")
     List<OaClass> findByClassIds(@Param("classIds") List<Long> classIds);
 
+    @SuppressWarnings("JpaQlInspection")
+    @Query("select c from OaClass c where c.oaGradeByGradeId=:gradeId")
+    List<OaClass> findByGradeId(@Param("gradeId") Long gradeId);
+
 }

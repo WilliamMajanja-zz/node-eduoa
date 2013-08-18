@@ -1,5 +1,6 @@
 package com.node.eduoa.entity;
 
+import com.google.common.collect.Lists;
 import com.node.system.entity.IdEntity;
 
 import javax.persistence.Basic;
@@ -29,8 +30,8 @@ public class CmsChannel extends IdEntity {
     @javax.persistence.Column(name = "channel_url")
     @Basic
     private String channelUrl;
-    @OneToMany(mappedBy = "cmsChannelByChannelId")
-    private List<CmsArticle> cmsArticlesById;
+    @OneToMany(mappedBy = "channel")
+    private List<CmsArticle> articles = Lists.newArrayList();
 
     public String getChannelName() {
         return channelName;
@@ -56,12 +57,11 @@ public class CmsChannel extends IdEntity {
         this.channelUrl = channelUrl;
     }
 
-    public List<CmsArticle> getCmsArticlesById() {
-        return cmsArticlesById;
+    public List<CmsArticle> getArticles() {
+        return articles;
     }
 
-    public void setCmsArticlesById(List<CmsArticle> cmsArticlesById) {
-        this.cmsArticlesById = cmsArticlesById;
+    public void setArticles(List<CmsArticle> articles) {
+        this.articles = articles;
     }
-
 }

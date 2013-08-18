@@ -90,4 +90,9 @@ public class ClassServiceImpl implements ClassService {
     public List<OaClass> findByClassIds(List<Long> classIds) {
         return classDAO.findByClassIds(classIds);
     }
+
+    @Override
+    public List<OaClass> findByGradeId(Long gradeId) {
+        return classDAO.findByGradeId(gradeId);
+    }
 }

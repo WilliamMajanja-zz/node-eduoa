@@ -27,10 +27,6 @@ public class CmsArticle extends IdEntity {
     @Basic
     private String title;
 
-    @Column(name = "summary")
-    @Basic
-    private String summary;
-
     @Column(name = "content")
     @Basic
     private String content;
@@ -60,10 +56,7 @@ public class CmsArticle extends IdEntity {
     private Integer articleState;
     @ManyToOne
     @JoinColumn(name = "channel_id", referencedColumnName = "id")
-    private CmsChannel cmsChannelByChannelId;
-
-    @OneToMany(mappedBy = "cmsArticleByArticleId")
-    private List<CmsArticleTeacher> cmsArticleTeachersById;
+    private CmsChannel channel;
 
     public Long getArticleClassId() {
         return articleClassId;
@@ -79,14 +72,6 @@ public class CmsArticle extends IdEntity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     public String getContent() {
@@ -145,20 +130,11 @@ public class CmsArticle extends IdEntity {
         this.articleState = articleState;
     }
 
-    public CmsChannel getCmsChannelByChannelId() {
-        return cmsChannelByChannelId;
+    public CmsChannel getChannel() {
+        return channel;
     }
 
-    public void setCmsChannelByChannelId(CmsChannel cmsChannelByChannelId) {
-        this.cmsChannelByChannelId = cmsChannelByChannelId;
+    public void setChannel(CmsChannel channel) {
+        this.channel = channel;
     }
-
-    public List<CmsArticleTeacher> getCmsArticleTeachersById() {
-        return cmsArticleTeachersById;
-    }
-
-    public void setCmsArticleTeachersById(List<CmsArticleTeacher> cmsArticleTeachersById) {
-        this.cmsArticleTeachersById = cmsArticleTeachersById;
-    }
-
 }
